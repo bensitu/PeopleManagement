@@ -14,6 +14,8 @@ import java.util.Date;
  * @CreateDate 2022/9/8
  * @Description
  */
+
+//Entity
 @Data
 @TableName(value = "t_employee")
 public class Employee {
