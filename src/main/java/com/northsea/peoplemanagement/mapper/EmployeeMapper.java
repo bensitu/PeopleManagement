@@ -12,6 +12,6 @@ import org.apache.ibatis.annotations.Select;
  */
 @Mapper
 public interface EmployeeMapper extends BaseMapper<Employee> {
-//    @Select("select * from users where id = #{id}")
+//    @Select("select * from t_employee where employee_id = #{employee_id}")
 //    Employee getById(int id);
 }
