@@ -1,6 +1,6 @@
 # 服务端口号 Server port サーバポート
 server:
-  port: 8080
+  port: 8090
 
 # 数据库连接配置 Database connection データベース接続構成
 spring:
