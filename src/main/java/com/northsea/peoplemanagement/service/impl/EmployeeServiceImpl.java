@@ -8,6 +8,8 @@ import com.northsea.peoplemanagement.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author BenSitu
  * @CreateDate 2022/9/8
@@ -31,6 +33,11 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     public boolean deleteEmployee(Integer id) {
         return employeeMapper.deleteById(id) > 0;
+    }
+
+    @Override
+    public List<Employee> getAll() {
+        return employeeMapper.selectList(null);
     }
 
     @Override

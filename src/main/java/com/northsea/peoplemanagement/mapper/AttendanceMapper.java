@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * @Author BenSitu
  * @CreateDate 2022/9/14
@@ -18,4 +20,12 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
 
        @Insert("INSERT INTO t_attendance(record_id, attendance_date, start_time, end_time, rest_hours, working_hours, overtime_hours, absence_hours, working_status_id, working_details, create_date, create_user_id, update_date, update_user_id, flow_status_id, rec_del_flg) VALUES (#{record_id}, #{attendance_date}, #{start_time}, #{end_time}, #{rest_hours}, #{working_hours}, #{overtime_hours}, #{absence_hours}, #{working_status_id}, #{working_details}, #{create_date}, #{create_user_id}, #{update_date}, #{update_user_id}, #{flow_status_id}, #{rec_del_flg});")
        int insert(Attendance attendance);
+
+       @Select("select * from t_attendance")
+       List<Attendance> getAll();
+
+       @Select("select * from t_attendacne where rec_del_flg = #{rec_del_flg}")
+       List<Attendance> getAllNotDel(Integer del_flag);
+
+
 }

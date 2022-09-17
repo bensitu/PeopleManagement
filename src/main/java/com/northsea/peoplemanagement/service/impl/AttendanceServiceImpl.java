@@ -8,6 +8,8 @@ import com.northsea.peoplemanagement.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author BenSitu
  * @CreateDate 2022/9/14
@@ -19,18 +21,36 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
     private AttendanceMapper attendanceMapper;
 
     @Override
-    public boolean insertAttendance(Attendance attendance) {
+    public boolean saveAttendance(Attendance attendance) {
         return attendanceMapper.insert(attendance) > 0;
     }
+    //返回值为修改了多少行， 用大于0判断是否成功修改
 
     @Override
-    public boolean modifyAttendance(Attendance attendance) {
+    public boolean updateAttendance(Attendance attendance) {
         return attendanceMapper.updateById(attendance) > 0;
+    }
+    //返回值为修改了多少行， 用大于0判断是否成功修改
+
+    @Override
+    public boolean deleteAttendance(String id) {
+        return attendanceMapper.deleteById(id) > 0;
+    }
+    //返回值为修改了多少行， 用大于0判断是否成功修改
+
+    @Override
+    public List<Attendance> getAll() {
+        return attendanceMapper.selectList(null);
     }
 
     @Override
-    public boolean deleteAttendance(String record_id) {
-        return attendanceMapper.deleteById(record_id) > 0;
+    public Attendance getById(String id) {
+        return attendanceMapper.selectById(id);
+    }
+
+    @Override
+    public List<Attendance> getAllNotDel(Integer rec_del_flg) {
+        return attendanceMapper.getAllNotDel(rec_del_flg);
     }
 
     @Override
