@@ -16,6 +16,11 @@ public class EmployeeServiceTest {
 
     @Test
     void getByIdTest(){
-        System.out.println(employeeService.getById(1));
+        System.out.println(employeeService.getById(10001));
+    }
+
+    @Test
+    void getAll() {
+        employeeService.getAll();
     }
 }

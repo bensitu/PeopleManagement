@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.northsea.peoplemanagement.domain.Employee;
 
+import java.util.List;
+
 /**
  * @Author BenSitu
  * @CreateDate 2022/9/8
@@ -17,6 +19,8 @@ public interface EmployeeService extends IService<Employee> {
     boolean modifyEmployee(Employee employee);
 
     boolean deleteEmployee(Integer id);
+
+    List<Employee> getAll();
 
     IPage<Employee> getPage(int currentPage,int pageSize);
 

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.northsea.peoplemanagement.domain.Attendance;
 
+import java.util.List;
+
 /**
  * @Author BenSitu
  * @CreateDate 2022/9/14
@@ -11,11 +13,17 @@ import com.northsea.peoplemanagement.domain.Attendance;
  */
 
 public interface AttendanceService extends IService<Attendance> {
-    public boolean insertAttendance(Attendance attendance);
+    boolean saveAttendance(Attendance attendance);
 
-    boolean modifyAttendance(Attendance attendance);
+    boolean updateAttendance(Attendance attendance);
 
     boolean deleteAttendance(String record_id);
+
+    List<Attendance> getAll();
+
+    Attendance getById(String id);
+
+    List<Attendance> getAllNotDel(Integer rec_del_flg);
 
     IPage<Attendance> getPage(int currentPage, int pageSize);
 
