@@ -49,10 +49,10 @@
               </div>
             </div>
             <div class="goBack floatRight">
-              <el-button class="ml-5" type="info">戻る</el-button>
+              <el-button class="ml-5" type="info" @click="handleBack()">戻る</el-button>
             </div>
             <div class="newRecord floatRight">
-              <el-button class="" type="success">新規作成<i class="el-icon-circle-plus-outline ml-5"></i></el-button>
+              <el-button class="" type="success" @click="handleCreate()">新規作成<i class="el-icon-circle-plus-outline ml-5"></i></el-button>
             </div>
             <div class="cleanBoth">
             </div>
@@ -106,11 +106,6 @@
 <script>
 // @ is an alias to /src
 
-import request from "@/utils/request";
-import Vue from "vue";
-var axios = require('axios')
-// 全局注册
-Vue.prototype.$axios = axios
 
 export default {
   name: 'DetailsView',
@@ -140,22 +135,50 @@ export default {
 
   },
   methods: {
-    load(){
-      request.get("http://localhost:8090/attendances").then(res=>{
-        console.log(res.data);
-      })
-    },
     getAll(){
-      this.$axios.get("http://localhost:8090/attendances").then(res =>
-          this.dataList = res.data.data
-          )
-          .catch(err => console.log(err));
+      this.$axios.get("http://localhost:8090/attendances").then((res)=>{
+        this.dataList = res.data.data;
+      }).catch(err => console.log(err));
     },
     handleEdit(index, row) {
       console.log(index, row);
+      this.$router.push({
+        name:'Updaterecord',
+        params: {
+          record_id: row.record_id
+        }
+      })
+      // this.$axois.get("/attendances/"+row.record_id).then((res)=>{
+      //   this.dataList = res.data.data;
+      // })
     },
     handleDelete(index, row) {
       console.log(index, row);
+      this.$confirm("削除は確認しましたか","メッセージ",{type:"info"}).then(()=>{
+        this.$axios.delete("/attendances/details/"+row.record_id).then((res)=>{
+          if (res.data.flag){
+            this.$message.success("削除しました");
+          } else {
+            this.$message.error("削除できません");
+          }
+        })
+        //     .finally(()=>{
+        //   this.getAll();
+        // })
+      }).catch(()=>{
+        this.$message.error("キャンセルしました");
+      })
+
+    },
+    handleCreate(){
+      this.$router.push({
+        name: 'Addrecord'
+      })
+    },
+    handleBack(){
+      this.$router.push({
+        name: 'home'
+      })
     }
   }
 }

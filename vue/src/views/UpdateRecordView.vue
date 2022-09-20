@@ -35,7 +35,7 @@
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">ホーム</el-breadcrumb-item>
             <el-breadcrumb-item>詳細</el-breadcrumb-item>
-            <el-breadcrumb-item>登録</el-breadcrumb-item>
+            <el-breadcrumb-item>更新</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="mt-10">
@@ -93,7 +93,7 @@
                   <el-input type="textarea" v-model="form.workingdetails"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="onSubmit">登録</el-button>
+                  <el-button type="primary" @click="onSubmit">更新</el-button>
                   <el-button @click="handleBack()">戻る</el-button>
                 </el-form-item>
               </el-form>
@@ -108,7 +108,7 @@
 <script>
 
 export default {
-  name: 'AddRecordView',
+  name: 'UpdateRecordView',
 
   data() {
     return {
@@ -132,18 +132,26 @@ export default {
     }
   },
   created() {
-
+    this.getInfo();
   },
   methods: {
+    getInfo(){
+      console.log(this.$route.params.record_id);
+      const recordId = this.$route.params.record_id;
+      this.$axios.get("/attendances/details/"+recordId).then((res)=>{
+        console.log(res);
+        this.dataList = res.data.data;
+      })
+    },
     onSubmit() {
-      this.$axios.post("/attendances", this.form).then((res)=> {
+      this.$axios.put("/attendances", this.form).then((res)=> {
         if(res.data.flag){
-          this.$message.success("登録完了しました");
+          this.$message.success("更新完了しました");
           this.$router.push({
             name: 'Details'
           })
         } else {
-          this.$message.error("エラー、登録できません");
+          this.$message.error("エラー、更新できません");
         }
       })
     },

@@ -54,9 +54,16 @@ public class AttendanceServiceTest {
     }
 
     @Test
-    void getByDate(){
+    void getByDateTest(){
         LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Attendance::getAttendance_date, "2022-09-14");
         List<Attendance> attendances = attendanceService.list();
+    }
+
+    @Test
+    void getByRecordIdTest(){
+        LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Attendance::getRecord_id, "100012022091403");
+        attendanceService.getOne(lambdaQueryWrapper);
     }
 }

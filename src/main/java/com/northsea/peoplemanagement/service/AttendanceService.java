@@ -23,6 +23,8 @@ public interface AttendanceService extends IService<Attendance> {
 
     Attendance getById(String id);
 
+    Attendance getByRecordId(String id);
+
     List<Attendance> getAllNotDel(Integer rec_del_flg);
 
     IPage<Attendance> getPage(int currentPage, int pageSize);

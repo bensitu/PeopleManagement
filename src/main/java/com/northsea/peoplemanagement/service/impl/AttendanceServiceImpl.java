@@ -7,6 +7,7 @@ import com.northsea.peoplemanagement.mapper.AttendanceMapper;
 import com.northsea.peoplemanagement.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
     //返回值为修改了多少行， 用大于0判断是否成功修改
 
     @Override
-    public boolean deleteAttendance(String id) {
-        return attendanceMapper.deleteById(id) > 0;
+    public boolean deleteAttendance(String record_id) {
+        return attendanceMapper.deleteById(record_id) > 0;
     }
     //返回值为修改了多少行， 用大于0判断是否成功修改
 
@@ -46,6 +47,12 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
     @Override
     public Attendance getById(String id) {
         return attendanceMapper.selectById(id);
+    }
+
+    @Transactional
+    @Override
+    public Attendance getByRecordId(String record_id) {
+        return attendanceMapper.getByRecordId(record_id);
     }
 
     @Override

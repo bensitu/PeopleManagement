@@ -22,7 +22,7 @@ public class AttendanceController {
 
     @PostMapping
     public DataResult save(@RequestBody Attendance attendance){
-        return new DataResult(attendanceService.save(attendance));
+        return new DataResult(true,attendanceService.save(attendance));
     }
 
     @GetMapping
@@ -32,17 +32,17 @@ public class AttendanceController {
 
     @PutMapping
     public DataResult update(@RequestBody Attendance attendance){
-        return new DataResult(attendanceService.updateAttendance(attendance));
+        return new DataResult(true, attendanceService.updateAttendance(attendance));
     }
 
-    @DeleteMapping("/{id}")
-    public DataResult delete(@PathVariable String id ){
-        return new DataResult(attendanceService.deleteAttendance(id));
+    @DeleteMapping("/details/{record_id}")
+    public DataResult delete(@PathVariable String record_id ){
+        return new DataResult(true, attendanceService.deleteAttendance(record_id));
     }
 
-    @GetMapping("/{id}")
-    public DataResult getByRecordId(@PathVariable String id){
-        return new DataResult(true, attendanceService.getById(id));
+    @GetMapping("/details/{record_id}")
+    public DataResult getByRecordId(@PathVariable String record_id){
+        return new DataResult(true, attendanceService.getByRecordId(record_id));
     }
 
     @GetMapping("/{currentPage}/{pageSize}")
@@ -51,7 +51,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/{rec_del_flg}")
-    public DataResult getAllNotDel(@PathVariable int rec_del_flg) {
+    public DataResult getAllNotDel(@PathVariable(value = "rec_del_flg") int rec_del_flg) {
         return new DataResult(true, attendanceService.getAllNotDel(rec_del_flg));
     }
 

@@ -24,8 +24,10 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
        @Select("select * from t_attendance")
        List<Attendance> getAll();
 
-       @Select("select * from t_attendacne where rec_del_flg = #{rec_del_flg}")
+       @Select("select * from t_attendance where rec_del_flg = #{rec_del_flg}")
        List<Attendance> getAllNotDel(Integer del_flag);
 
+       @Select("select * from t_attendance where rec_del_flg = #{rec_del_flg} and attendance_date = #{attendance_date}")
+       List<Attendance> getAllOnSelectedDate(Integer rec_del_flg, String attendance_date);
 
 }
