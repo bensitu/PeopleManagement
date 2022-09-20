@@ -89,12 +89,16 @@
               </template>
             </el-table-column>
           </el-table>
-          <div>
+          <div class="pagination-container">
             <div class="block mt-5">
               <el-pagination
+                  class="pagination"
+                  @current-change="handleCurrentChange"
+                  :current-page="pagination.currentPage"
+                  :page-size="pagination.pageSize"
                   small
-                  layout="prev, pager, next"
-                  :total="50">
+                  layout="total, prev, pager, next"
+                  :total="pagination.total">
               </el-pagination>
             </div>
           </div>
@@ -127,6 +131,11 @@ export default {
         disabledDate(time) {
           return time.getTime() > Date.now();
         },
+      },
+      pagination:{
+        currentPage: 1,
+        pageSize: 10,
+        total: 0
       }
     }
   },
@@ -139,6 +148,25 @@ export default {
       this.$axios.get("http://localhost:8090/attendances").then((res)=>{
         this.dataList = res.data.data;
       }).catch(err => console.log(err));
+    },
+    getPages(){
+      this.$axios.get("/attendances/"+this.pagination.currentPage+"/"+this.pagination.pageSize).then((res)=>{
+        this.pagination.pageSize = res.data.data.size;
+        this.pagination.currentPage = res.data.data.current;
+        this.pagination.total = res.data.data.total;
+        console.log(res.data);
+        this.dataList = res.data.data;
+      })
+    },
+    handleCurrentChange(currentPage){
+
+    },
+    getInfoByRecordId(){
+      this.$axios.get("/attendances/details/"+row.record_id).then((res)=>{
+        if (res.data.flag){
+
+        }
+      })
     },
     handleEdit(index, row) {
       console.log(index, row);
@@ -155,8 +183,11 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
       this.$confirm("削除は確認しましたか","メッセージ",{type:"info"}).then(()=>{
-        this.$axios.delete("/attendances/details/"+row.record_id).then((res)=>{
+
+
+        this.$axios.put("/attendances/details/"+row.record_id).then((res)=>{
           if (res.data.flag){
+            res.data.data.rec_del_flg = 1;
             this.$message.success("削除しました");
           } else {
             this.$message.error("削除できません");
