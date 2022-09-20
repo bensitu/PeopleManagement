@@ -161,10 +161,9 @@ export default {
           } else {
             this.$message.error("削除できません");
           }
+        }).finally(()=>{
+          this.getAll();
         })
-        //     .finally(()=>{
-        //   this.getAll();
-        // })
       }).catch(()=>{
         this.$message.error("キャンセルしました");
       })
