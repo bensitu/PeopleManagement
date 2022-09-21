@@ -1,6 +1,8 @@
 package com.northsea.peoplemanagement.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.northsea.peoplemanagement.domain.Attendance;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Test;
@@ -65,5 +67,14 @@ public class AttendanceServiceTest {
         LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Attendance::getRecord_id, "100012022091403");
         attendanceService.getOne(lambdaQueryWrapper);
+    }
+
+    @Test
+    void getPagesTest(){
+        IPage<Attendance> page = attendanceService.getPage(1,10);
+        System.out.println(page.getCurrent());
+        System.out.println(page.getPages());
+        System.out.println(page.getSize());
+        System.out.println(page.getRecords());
     }
 }

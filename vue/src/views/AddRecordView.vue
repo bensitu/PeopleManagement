@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$axios.post("/attendances", this.form).then((res)=> {
+      this.$axios.post("http://localhost:8090/attendances", this.form).then((res)=> {
         if(res.data.flag){
           this.$message.success("登録完了しました");
           this.$router.push({

@@ -41,11 +41,12 @@
             <div class="searchBox floatLeft">
               <div class="block">
                 <el-date-picker
-                    v-model="search_date"
+                    v-model="pagination.search_date"
                     type="date"
+                    value-format="yyyy-MM-dd"
                     placeholder="日付を選択してください">
                 </el-date-picker>
-                <el-button class="ml-5" type="primary" icon="el-icon-search">検索</el-button>
+                <el-button class="ml-5" type="primary" icon="el-icon-search" @click="searchInfo()">検索</el-button>
               </div>
             </div>
             <div class="goBack floatRight">
@@ -135,7 +136,8 @@ export default {
       pagination:{
         currentPage: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
+        search_date : ''
       }
     }
   },
@@ -144,25 +146,31 @@ export default {
 
   },
   methods: {
-    getAll(){
-      this.$axios.get("http://localhost:8090/attendances").then((res)=>{
-        this.dataList = res.data.data;
+    searchInfo(){
+      let param = "?type="+this.pagination.search_date;
+      console.log(param);
+      this.$axios.get("http://localhost:8090/attendances/"+this.pagination.currentPage+"/"+this.pagination.pageSize+param).then((res)=>{
+        this.pagination.pageSize = res.data.data.size;
+        this.pagination.currentPage = res.data.data.current;
+        this.pagination.total = res.data.data.total;
+        this.dataList = res.data.data.records;
       }).catch(err => console.log(err));
     },
-    getPages(){
-      this.$axios.get("/attendances/"+this.pagination.currentPage+"/"+this.pagination.pageSize).then((res)=>{
+    getAll(){
+      this.$axios.get("http://localhost:8090/attendances/"+this.pagination.currentPage+"/"+this.pagination.pageSize).then((res)=>{
         this.pagination.pageSize = res.data.data.size;
         this.pagination.currentPage = res.data.data.current;
         this.pagination.total = res.data.data.total;
         console.log(res.data);
-        this.dataList = res.data.data;
-      })
+        this.dataList = res.data.data.records;
+      }).catch(err => console.log(err));
     },
     handleCurrentChange(currentPage){
-
+      this.pagination.currentPage = currentPage;
+      this.getAll();
     },
     getInfoByRecordId(){
-      this.$axios.get("/attendances/details/"+row.record_id).then((res)=>{
+      this.$axios.get("http://localhost:8090/attendances/details/"+row.record_id).then((res)=>{
         if (res.data.flag){
 
         }
@@ -185,7 +193,7 @@ export default {
       this.$confirm("削除は確認しましたか","メッセージ",{type:"info"}).then(()=>{
 
 
-        this.$axios.put("/attendances/details/"+row.record_id).then((res)=>{
+        this.$axios.put("http://localhost:8090/attendances/details/"+row.record_id).then((res)=>{
           if (res.data.flag){
             res.data.data.rec_del_flg = 1;
             this.$message.success("削除しました");

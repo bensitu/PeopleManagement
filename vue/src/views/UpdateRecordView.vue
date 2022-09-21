@@ -45,52 +45,48 @@
               <el-form ref="form" :model="form" label-width="120px">
                 <el-form-item label="日付">
                   <el-date-picker
-                      v-model="form.date"
+                      v-model="form.attendance_date"
                       type="date"
                       placeholder="日付選択">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="作業開始時間">
                   <el-time-picker
-                      v-model="form.starttime"
+                      v-model="form.start_time"
                       placeholder="時間選択"
-                      format="yyyy-MM-dd HH:mm"
-                      value-format="yyyy-MM-dd HH:mm:ss"
+                      format="HH:mm"
+                      value-format="HH:mm"
                       type="datetime">
                   </el-time-picker>
                 </el-form-item>
                 <el-form-item label="作業終了時間">
                   <el-time-picker
-                      v-model="form.endtime"
+                      v-model="form.end_time"
                       placeholder="時間選択"
-                      format="yyyy-MM-dd HH:mm"
-                      value-format="yyyy-MM-dd HH:mm:ss"
+                      format="HH:mm"
+                      value-format="HH:mm"
                       type="datetime">
                   </el-time-picker>
                 </el-form-item>
                 <el-form-item label="休憩時間">
-                  <el-input v-model="form.resthours"></el-input>
+                  <el-input v-model="form.rest_hours"></el-input>
                 </el-form-item>
                 <el-form-item label="労働時間">
-                  <el-input v-model="form.workinghours" readonly></el-input>
+                  <el-input v-model="form.working_hours" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="残業時間">
-                  <el-input v-model="form.overtimehours" readonly></el-input>
+                  <el-input v-model="form.overtime_hours" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="欠勤時間">
-                  <el-input v-model="form.absencehours"></el-input>
+                  <el-input v-model="form.absence_hours"></el-input>
                 </el-form-item>
                 <el-form-item label="出勤状態">
-                  <el-select v-model="form.type" placeholder="" value="">
-                    <el-option label="出勤" value="work"></el-option>
-                    <el-option label="有給休暇" value="rest"></el-option>
-                    <el-option label="特別休暇" value="specialrest"></el-option>
-                    <el-option label="欠勤" value="absence"></el-option>
-                    <el-option label="その他" value="others"></el-option>
+                  <el-select v-model="form.type" placeholder="選択する" value="">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="作業内容">
-                  <el-input type="textarea" v-model="form.workingdetails"></el-input>
+                  <el-input type="textarea" v-model="form.working_details"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="onSubmit">更新</el-button>
@@ -114,21 +110,38 @@ export default {
     return {
       form: {
         record_id: '',
-        date: '',
-        starttime: '',
-        endtime: '',
-        resthours: '',
-        workinghours: '',
-        overtimehours: '',
+        attendance_date: '',
+        start_time: '',
+        end_time: '',
+        rest_hours: '',
+        working_hours: '',
+        overtime_hours: '',
         type: [],
-        absencehours: '',
-        workingdetails: ''
+        absence_hours: '',
+        working_details: ''
       },
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
         },
       },
+      options: [{
+          value: 0,
+          label: '出勤',
+        },{
+          value: 1,
+          label: '有給休暇',
+        },{
+          value: 2,
+          label: '特別休暇',
+        },{
+          value: 3,
+          label: '欠勤',
+        },{
+          value: 9,
+          label: 'その他',
+        }],
+      value: ''
     }
   },
   created() {
@@ -136,15 +149,16 @@ export default {
   },
   methods: {
     getInfo(){
-      console.log(this.$route.params.record_id);
+      //console.log(this.$route.params.record_id);
       const recordId = this.$route.params.record_id;
-      this.$axios.get("/attendances/details/"+recordId).then((res)=>{
-        console.log(res);
-        this.dataList = res.data.data;
+      this.$axios.get("http://localhost:8090/attendances/details/"+recordId).then((res)=>{
+        //console.log(res.data.data);
+        this.form = res.data.data;
+        console.log(this.form);
       })
     },
     onSubmit() {
-      this.$axios.put("/attendances", this.form).then((res)=> {
+      this.$axios.put("http://localhost:8090/attendances", this.form).then((res)=> {
         if(res.data.flag){
           this.$message.success("更新完了しました");
           this.$router.push({

@@ -1,6 +1,8 @@
 package com.northsea.peoplemanagement.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.northsea.peoplemanagement.domain.Attendance;
 import com.northsea.peoplemanagement.mapper.AttendanceMapper;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author BenSitu
@@ -62,11 +65,48 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
 
     @Override
     public IPage<Attendance> getPage(int currentPage, int pageSize) {
-        return null;
+        IPage<Attendance> page = new Page<>(currentPage, pageSize);
+        attendanceMapper.selectPage(page, null);
+        return page;
     }
 
     @Override
     public IPage<Attendance> getPage(int currentPage, int pageSize, Attendance attendance) {
-        return null;
+        IPage<Attendance> page = new Page<>(currentPage, pageSize);
+        attendanceMapper.selectPage(page, null);
+        return page;
     }
+
+//    @Override
+//    public IPage<Attendance> getAllBySearch(int currentPage, int pageSize, String attendance_date) {
+//        QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.isNotNull("attendance_date").eq("attendance_date", attendance_date);
+//
+//        Page<Attendance> page = new Page<>(currentPage, pageSize);
+
+
+//        LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+//        String attendance_date = date;
+//        lambdaQueryWrapper.eq(attendance_date != null, Attendance::getAttendance_date, attendance_date);
+        //for (Attendance attendance : attendanceMapper.selectPage())
+
+//        attendanceMapper.selectPage(page, queryWrapper);
+        //List<Map<String, Attendance>> records = page.getRecords();
+//        return page;
+//    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

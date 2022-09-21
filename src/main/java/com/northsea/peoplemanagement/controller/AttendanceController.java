@@ -47,12 +47,25 @@ public class AttendanceController {
 
     @GetMapping("/{currentPage}/{pageSize}")
     public DataResult getPage(@PathVariable int currentPage, @PathVariable int pageSize){
-        return new DataResult(true, attendanceService.getPage(currentPage,pageSize));
+        IPage<Attendance> page = attendanceService.getPage(currentPage, pageSize);
+        if (currentPage > page.getPages()){
+            page = attendanceService.getPage((int) page.getPages(), pageSize);
+        }
+        return new DataResult(true, page);
     }
 
     @GetMapping("/{rec_del_flg}")
     public DataResult getAllNotDel(@PathVariable(value = "rec_del_flg") int rec_del_flg) {
         return new DataResult(true, attendanceService.getAllNotDel(rec_del_flg));
     }
+
+//    @GetMapping
+//    public DataResult getAllBySearch(@PathVariable int currentPage, @PathVariable int pageSize, @PathVariable String date){
+//        IPage<Attendance> page = attendanceService.getPage(currentPage, pageSize);
+//        if (currentPage > page.getPages()){
+//            page = attendanceService.getPage((int) page.getPages(), pageSize);
+//        }
+//        return new DataResult(true, page, date);
+//    }
 
 }
