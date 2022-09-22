@@ -16,17 +16,29 @@
 
       <el-container>
         <el-header style="font-size: 12px">
-          <div style="text-align: right;">
-            <el-dropdown>
-              <i class="el-icon-setting" style="margin-right: 15px"></i>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>View</el-dropdown-item>
-                <el-dropdown-item>Add</el-dropdown-item>
-                <el-dropdown-item>Delete</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <span>Ben</span>
-          </div>
+          <el-descriptions style="margin-top: 6px" title="" :column="3" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                社員ID
+              </template>
+              <span>{{employee_info.employee_id}}</span>
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-edit-outline"></i>
+                氏名
+              </template>
+              <span>{{employee_info.employee_name}}</span>
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-office-building"></i>
+                所属部門
+              </template>
+              <span>{{employee_info.department_name}}</span>
+            </el-descriptions-item>
+          </el-descriptions>
         </el-header>
 
         <el-main>
@@ -37,13 +49,17 @@
               <el-breadcrumb-item>登録</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-          <div class="functionNav mt-10">
+          <div>
+
+          </div>
+          <div class="functionNav mt-20">
             <div class="searchBox floatLeft">
               <div class="block">
                 <el-date-picker
                     v-model="pagination.search_date"
                     type="date"
                     value-format="yyyy-MM-dd"
+                    @change=""
                     placeholder="日付を選択してください">
                 </el-date-picker>
                 <el-button class="ml-5" type="primary" icon="el-icon-search" @click="searchInfo()">検索</el-button>
@@ -111,12 +127,16 @@
 <script>
 // @ is an alias to /src
 
-
 export default {
   name: 'DetailsView',
 
   data(){
     return {
+      employee_info:{
+        employee_id: '',
+        employee_name: '',
+        department_name: '',
+      },
       search_date: '',
       dataList:[],
       record_id: '',
@@ -142,39 +162,34 @@ export default {
     }
   },
   created() {
+    this.getEmployeeInfo(10002);
     this.getAll();
-
   },
   methods: {
     searchInfo(){
-      let param = "?type="+this.pagination.search_date;
-      console.log(param);
-      this.$axios.get("http://localhost:8090/attendances/"+this.pagination.currentPage+"/"+this.pagination.pageSize+param).then((res)=>{
-        this.pagination.pageSize = res.data.data.size;
-        this.pagination.currentPage = res.data.data.current;
-        this.pagination.total = res.data.data.total;
-        this.dataList = res.data.data.records;
-      }).catch(err => console.log(err));
+      let param = "?attendance_date="+this.pagination.search_date;
+      if (this.pagination.search_date !== null) {
+        this.$axios.get("http://localhost:8090/attendances/search/"+this.pagination.currentPage+"/"+this.pagination.pageSize+param).then((res)=>{
+          this.pagination.pageSize = res.data.data.size;
+          this.pagination.currentPage = res.data.data.current;
+          this.pagination.total = res.data.data.total;
+          this.dataList = res.data.data.records;
+        }).catch(err => console.log(err));
+      } else {
+        this.getAll();
+      }
     },
     getAll(){
       this.$axios.get("http://localhost:8090/attendances/"+this.pagination.currentPage+"/"+this.pagination.pageSize).then((res)=>{
         this.pagination.pageSize = res.data.data.size;
         this.pagination.currentPage = res.data.data.current;
         this.pagination.total = res.data.data.total;
-        console.log(res.data);
         this.dataList = res.data.data.records;
       }).catch(err => console.log(err));
     },
     handleCurrentChange(currentPage){
       this.pagination.currentPage = currentPage;
       this.getAll();
-    },
-    getInfoByRecordId(){
-      this.$axios.get("http://localhost:8090/attendances/details/"+row.record_id).then((res)=>{
-        if (res.data.flag){
-
-        }
-      })
     },
     handleEdit(index, row) {
       console.log(index, row);
@@ -184,18 +199,12 @@ export default {
           record_id: row.record_id
         }
       })
-      // this.$axois.get("/attendances/"+row.record_id).then((res)=>{
-      //   this.dataList = res.data.data;
-      // })
     },
     handleDelete(index, row) {
       console.log(index, row);
       this.$confirm("削除は確認しましたか","メッセージ",{type:"info"}).then(()=>{
-
-
-        this.$axios.put("http://localhost:8090/attendances/details/"+row.record_id).then((res)=>{
+        this.$axios.delete("http://localhost:8090/attendances/delete/"+row.record_id).then((res)=>{
           if (res.data.flag){
-            res.data.data.rec_del_flg = 1;
             this.$message.success("削除しました");
           } else {
             this.$message.error("削除できません");
@@ -217,6 +226,14 @@ export default {
       this.$router.push({
         name: 'home'
       })
+    },
+    getEmployeeInfo(employeeID){
+      this.$axios.get("http://localhost:8090/employees/"+employeeID).then((res)=>{
+        console.log(res.data);
+        this.employee_info.employee_id = res.data.data.employee_id;
+        this.employee_info.employee_name = res.data.data.employee_name;
+        this.employee_info.department_name = res.data.data.dept_name;
+      }).catch(err => console.log(err));
     }
   }
 }
@@ -233,7 +250,7 @@ export default {
   color: #333;
 }
 
-.searchBox {
+.searchBox, .goBack, .newRecord {
   margin:10px 0;
 }
 </style>

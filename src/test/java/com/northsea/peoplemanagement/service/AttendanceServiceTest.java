@@ -77,4 +77,15 @@ public class AttendanceServiceTest {
         System.out.println(page.getSize());
         System.out.println(page.getRecords());
     }
+
+    @Test
+    void getInfoBySearchTest(){
+        IPage<Attendance> page = attendanceService.getAllBySearch(1, 10, "2022-09-14");
+        System.out.println(page.getRecords());
+    }
+
+    @Test
+    void deleteRecordTest(){
+        attendanceService.deleteAttendance("100012022091403");
+    }
 }

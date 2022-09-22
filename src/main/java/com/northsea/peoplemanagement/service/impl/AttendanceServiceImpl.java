@@ -1,5 +1,6 @@
 package com.northsea.peoplemanagement.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author BenSitu
@@ -36,12 +36,14 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
     }
     //返回值为修改了多少行， 用大于0判断是否成功修改
 
+
     @Override
     public boolean deleteAttendance(String record_id) {
         return attendanceMapper.deleteById(record_id) > 0;
     }
     //返回值为修改了多少行， 用大于0判断是否成功修改
 
+    @Transactional
     @Override
     public List<Attendance> getAll() {
         return attendanceMapper.selectList(null);
@@ -58,6 +60,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
         return attendanceMapper.getByRecordId(record_id);
     }
 
+    @Transactional
     @Override
     public List<Attendance> getAllNotDel(Integer rec_del_flg) {
         return attendanceMapper.getAllNotDel(rec_del_flg);
@@ -77,23 +80,16 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
         return page;
     }
 
-//    @Override
-//    public IPage<Attendance> getAllBySearch(int currentPage, int pageSize, String attendance_date) {
-//        QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.isNotNull("attendance_date").eq("attendance_date", attendance_date);
-//
-//        Page<Attendance> page = new Page<>(currentPage, pageSize);
-
-
-//        LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-//        String attendance_date = date;
-//        lambdaQueryWrapper.eq(attendance_date != null, Attendance::getAttendance_date, attendance_date);
-        //for (Attendance attendance : attendanceMapper.selectPage())
-
-//        attendanceMapper.selectPage(page, queryWrapper);
-        //List<Map<String, Attendance>> records = page.getRecords();
-//        return page;
-//    }
+    @Transactional
+    @Override
+    public IPage<Attendance> getAllBySearch(int currentPage, int pageSize, String attendance_date) {
+        Page<Attendance> page = new Page<>(currentPage, pageSize);
+        QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(attendance_date)){
+            queryWrapper.eq("attendance_date", attendance_date);
+        }
+        return attendanceMapper.selectPage(page, queryWrapper);
+    }
 
 
 }

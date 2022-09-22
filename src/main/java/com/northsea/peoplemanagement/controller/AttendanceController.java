@@ -35,7 +35,8 @@ public class AttendanceController {
         return new DataResult(true, attendanceService.updateAttendance(attendance));
     }
 
-    @DeleteMapping("/details/{record_id}")
+
+    @DeleteMapping("/delete/{record_id}")
     public DataResult delete(@PathVariable String record_id ){
         return new DataResult(true, attendanceService.deleteAttendance(record_id));
     }
@@ -59,13 +60,13 @@ public class AttendanceController {
         return new DataResult(true, attendanceService.getAllNotDel(rec_del_flg));
     }
 
-//    @GetMapping
-//    public DataResult getAllBySearch(@PathVariable int currentPage, @PathVariable int pageSize, @PathVariable String date){
-//        IPage<Attendance> page = attendanceService.getPage(currentPage, pageSize);
-//        if (currentPage > page.getPages()){
-//            page = attendanceService.getPage((int) page.getPages(), pageSize);
-//        }
-//        return new DataResult(true, page, date);
-//    }
+    @GetMapping("/search/{currentPage}/{pageSize}")
+    public DataResult getAllBySearch(@PathVariable int currentPage, @PathVariable int pageSize, @RequestParam String attendance_date){
+        IPage<Attendance> page = attendanceService.getAllBySearch(currentPage, pageSize, attendance_date);
+        if (currentPage > page.getPages()){
+            page = attendanceService.getAllBySearch((int) page.getPages(), pageSize, attendance_date);
+        }
+        return new DataResult(true, page);
+    }
 
 }

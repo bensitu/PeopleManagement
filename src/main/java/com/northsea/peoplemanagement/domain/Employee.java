@@ -2,7 +2,6 @@ package com.northsea.peoplemanagement.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 

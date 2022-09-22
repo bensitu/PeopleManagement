@@ -32,6 +32,6 @@ public interface AttendanceService extends IService<Attendance> {
 
     IPage<Attendance> getPage(int currentPage, int pageSize, Attendance attendance);
 
-//    IPage<Map<String, Attendance>> getAllBySearch(int currentPage, int pageSize, String date);
+    IPage<Attendance> getAllBySearch(int currentPage, int pageSize, String attendance_date);
 
 }

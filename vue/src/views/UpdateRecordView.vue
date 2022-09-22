@@ -17,17 +17,29 @@
 
     <el-container>
       <el-header style="font-size: 12px">
-        <div style="text-align: right;">
-          <el-dropdown>
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>View</el-dropdown-item>
-              <el-dropdown-item>Add</el-dropdown-item>
-              <el-dropdown-item>Delete</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span>Ben</span>
-        </div>
+        <el-descriptions style="margin-top: 6px" title="" :column="3" border>
+          <el-descriptions-item>
+            <template slot="label">
+              <i class="el-icon-user"></i>
+              社員ID
+            </template>
+            <span>{{employee_info.employee_id}}</span>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              <i class="el-icon-edit-outline"></i>
+              氏名
+            </template>
+            <span>{{employee_info.employee_name}}</span>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              所属部門
+            </template>
+            <span>{{employee_info.department_name}}</span>
+          </el-descriptions-item>
+        </el-descriptions>
       </el-header>
 
       <el-main>
@@ -69,19 +81,19 @@
                   </el-time-picker>
                 </el-form-item>
                 <el-form-item label="休憩時間">
-                  <el-input v-model="form.rest_hours"></el-input>
-                </el-form-item>
-                <el-form-item label="労働時間">
-                  <el-input v-model="form.working_hours" readonly></el-input>
-                </el-form-item>
-                <el-form-item label="残業時間">
-                  <el-input v-model="form.overtime_hours" readonly></el-input>
+                  <el-input v-model="form.rest_hours" placeholder="0"></el-input>
                 </el-form-item>
                 <el-form-item label="欠勤時間">
-                  <el-input v-model="form.absence_hours"></el-input>
+                  <el-input v-model="form.absence_hours" placeholder="0"></el-input>
+                </el-form-item>
+                <el-form-item label="労働時間">
+                  <el-input v-model="form.working_hours" placeholder="計算中..." readonly></el-input>
+                </el-form-item>
+                <el-form-item label="残業時間">
+                  <el-input v-model="form.overtime_hours" placeholder="計算中..." readonly></el-input>
                 </el-form-item>
                 <el-form-item label="出勤状態">
-                  <el-select v-model="form.type" placeholder="選択する" value="">
+                  <el-select v-model="form.type" placeholder="状態選択" @change="getSelectedOption()">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                   </el-select>
                 </el-form-item>
@@ -108,6 +120,11 @@ export default {
 
   data() {
     return {
+      employee_info:{
+        employee_id: '',
+        employee_name: '',
+        department_name: '',
+      },
       form: {
         record_id: '',
         attendance_date: '',
@@ -116,7 +133,7 @@ export default {
         rest_hours: '',
         working_hours: '',
         overtime_hours: '',
-        type: [],
+        type: '',
         absence_hours: '',
         working_details: ''
       },
@@ -141,10 +158,10 @@ export default {
           value: 9,
           label: 'その他',
         }],
-      value: ''
     }
   },
   created() {
+    this.getEmployeeInfo(10002);
     this.getInfo();
   },
   methods: {
@@ -176,6 +193,17 @@ export default {
     },
     resetform(){
       this.form = {}
+    },
+    getSelectedOption(vId){
+      console.log();
+    },
+    getEmployeeInfo(employeeID){
+      this.$axios.get("http://localhost:8090/employees/"+employeeID).then((res)=>{
+        console.log(res.data);
+        this.employee_info.employee_id = res.data.data.employee_id;
+        this.employee_info.employee_name = res.data.data.employee_name;
+        this.employee_info.department_name = res.data.data.dept_name;
+      }).catch(err => console.log(err));
     }
   }
 }
