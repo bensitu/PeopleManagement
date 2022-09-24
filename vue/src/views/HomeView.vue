@@ -24,17 +24,29 @@
 
     <el-container>
       <el-header style="font-size: 12px">
-        <div style="text-align: right;">
-          <el-dropdown>
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>View</el-dropdown-item>
-              <el-dropdown-item>Add</el-dropdown-item>
-              <el-dropdown-item>Delete</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span>Ben</span>
-        </div>
+        <el-descriptions style="margin-top: 6px" title="" :column="3" border>
+          <el-descriptions-item>
+            <template slot="label">
+              <i class="el-icon-user"></i>
+              社員ID
+            </template>
+            <span>{{employee_info.employee_id}}</span>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              <i class="el-icon-edit-outline"></i>
+              氏名
+            </template>
+            <span>{{employee_info.employee_name}}</span>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              所属部門
+            </template>
+            <span>{{employee_info.department_name}}</span>
+          </el-descriptions-item>
+        </el-descriptions>
       </el-header>
 
       <el-main>
@@ -60,9 +72,27 @@ export default {
   name: 'HomeView',
 
   data() {
-    return {}
+    return {
+      employee_info:{
+        employee_id: '',
+        employee_name: '',
+        department_name: '',
+      }
+    }
   },
-  methods: {}
+  created() {
+    this.getEmployeeInfo(10002);
+  },
+  methods: {
+  getEmployeeInfo(employeeID){
+    this.$axios.get("http://localhost:8090/employees/"+employeeID).then((res)=>{
+      console.log(res.data);
+      this.employee_info.employee_id = res.data.data.employee_id;
+      this.employee_info.employee_name = res.data.data.employee_name;
+      this.employee_info.department_name = res.data.data.dept_name;
+    }).catch(err => console.log(err));
+  }
+  }
 }
 </script>
 

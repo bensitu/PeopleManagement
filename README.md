@@ -5,6 +5,7 @@
 
 ```shell
 cd vue
+npm i
 npm run serve
 ```
 

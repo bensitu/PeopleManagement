@@ -21,8 +21,8 @@ public class AttendanceController {
     private AttendanceService attendanceService;
 
     @PostMapping
-    public DataResult save(@RequestBody Attendance attendance){
-        return new DataResult(true,attendanceService.save(attendance));
+    public DataResult saveAttendance(@RequestBody Attendance attendance){
+        return new DataResult(true, attendanceService.saveAttendance(attendance));
     }
 
     @GetMapping
@@ -31,13 +31,17 @@ public class AttendanceController {
     }
 
     @PutMapping
-    public DataResult update(@RequestBody Attendance attendance){
+    public DataResult updateAttendance(@RequestBody Attendance attendance){
         return new DataResult(true, attendanceService.updateAttendance(attendance));
     }
 
+    @PutMapping("/updates")
+    public DataResult updateExistingInfo(@RequestBody Attendance attendance) {
+        return new DataResult(true, attendanceService.updateById(attendance));
+    }
 
     @DeleteMapping("/delete/{record_id}")
-    public DataResult delete(@PathVariable String record_id ){
+    public DataResult deleteAttendance(@PathVariable String record_id ){
         return new DataResult(true, attendanceService.deleteAttendance(record_id));
     }
 

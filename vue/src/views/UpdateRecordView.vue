@@ -59,6 +59,8 @@
                   <el-date-picker
                       v-model="form.attendance_date"
                       type="date"
+                      format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd"
                       placeholder="日付選択">
                   </el-date-picker>
                 </el-form-item>
@@ -93,7 +95,7 @@
                   <el-input v-model="form.overtime_hours" placeholder="計算中..." readonly></el-input>
                 </el-form-item>
                 <el-form-item label="出勤状態">
-                  <el-select v-model="form.type" placeholder="状態選択" @change="getSelectedOption()">
+                  <el-select v-model="form.working_status_id" placeholder="状態選択" @change="getSelectedOption()">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                   </el-select>
                 </el-form-item>
@@ -133,9 +135,14 @@ export default {
         rest_hours: '',
         working_hours: '',
         overtime_hours: '',
-        type: '',
+        working_status_id: '',
         absence_hours: '',
-        working_details: ''
+        working_details: '',
+        create_date: '',
+        create_user_id: '',
+        update_date: '',
+        update_user_id:'',
+        flow_status_id:''
       },
       pickerOptions: {
         disabledDate(time) {
@@ -166,16 +173,15 @@ export default {
   },
   methods: {
     getInfo(){
-      //console.log(this.$route.params.record_id);
       const recordId = this.$route.params.record_id;
       this.$axios.get("http://localhost:8090/attendances/details/"+recordId).then((res)=>{
-        //console.log(res.data.data);
         this.form = res.data.data;
-        console.log(this.form);
       })
     },
     onSubmit() {
       this.$axios.put("http://localhost:8090/attendances", this.form).then((res)=> {
+        this.form.update_user_id = this.employee_info.employee_id;
+        this.form.update_date = new Date();
         if(res.data.flag){
           this.$message.success("更新完了しました");
           this.$router.push({
@@ -199,7 +205,6 @@ export default {
     },
     getEmployeeInfo(employeeID){
       this.$axios.get("http://localhost:8090/employees/"+employeeID).then((res)=>{
-        console.log(res.data);
         this.employee_info.employee_id = res.data.data.employee_id;
         this.employee_info.employee_name = res.data.data.employee_name;
         this.employee_info.department_name = res.data.data.dept_name;
