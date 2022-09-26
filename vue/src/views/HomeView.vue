@@ -60,9 +60,39 @@
             <el-breadcrumb-item :to="{ path: '/' }">ホーム</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
+
+
+
         <div style="margin-top: 50px">
-          <el-skeleton/>
+          <div class="block">
+            <span class="demonstration"></span>
+            <el-date-picker
+                v-model="years"
+                type="year"
+                :pickerOptions="pickerOptions"
+                placeholder="年選択">
+            </el-date-picker>
+          </div>
+          <el-table :data="monthData" show-summary stripe border style="width: 100%" class="mt-20">
+            <el-table-column prop="record_id" align="center" label="月"></el-table-column>
+
+            <el-table-column prop="start_time" align="center" label="出勤時間">
+            </el-table-column>
+            <el-table-column prop="end_time" align="center" label="退勤時間">
+            </el-table-column>
+            <el-table-column prop="rest_hours" align="center" label="休憩時間">
+            </el-table-column>
+            <el-table-column prop="working_hours" align="center" label="作業時間">
+            </el-table-column>
+            <el-table-column prop="overtime_hours" align="center" label="残業時間">
+            </el-table-column>
+            <el-table-column prop="absence_hours" align="center" label="欠勤時間">
+            </el-table-column>
+
+          </el-table>
         </div>
+
+
       </el-main>
     </el-container>
   </el-container>
@@ -82,7 +112,14 @@ export default {
         employee_id: '',
         employee_name: '',
         department_name: '',
-      }
+      },
+      monthData:[],
+      years: '',
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        },
+      },
     }
   },
   created() {
@@ -100,7 +137,12 @@ export default {
         this.employee_info.employee_name = res.data.data.employee_name;
         this.employee_info.department_name = res.data.data.dept_name;
       }).catch(err => console.log(err));
-    }
+    },
+    getAttendanceData(year){
+      this.$axios.get("http://localhost:8090/attendancemonth"+ year).then((res)=>{
+        console.log(res);
+      }).catch(err => console.log(err));
+    },
   }
 }
 </script>

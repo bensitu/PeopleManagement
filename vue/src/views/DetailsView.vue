@@ -85,7 +85,7 @@
           </div>
         </div>
 
-        <el-table :data="dataList" stripe border>
+        <el-table :data="dataList" stripe border show-summary>
           <el-table-column prop="record_id" align="center" label="記録番号"></el-table-column>
           <el-table-column prop="attendance_date" align="center" label="日付">
           </el-table-column>
