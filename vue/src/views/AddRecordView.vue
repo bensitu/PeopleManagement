@@ -250,12 +250,16 @@ export default {
       let startTimeDate = new Date(inputDate + ' ' + this.form.start_time + ':00');
       let endTimeDate = new Date(inputDate + ' ' + this.form.end_time + ':00');
       let restHours = parseFloat(this.form.rest_hours).toFixed(1);
+      let workingHours = 8;
       let absenceHours = parseFloat(this.form.absence_hours).toFixed(1);
       if (typeof inputDate == "undefined" || inputDate == null || inputDate === "" || typeof startTimeDate == "undefined" || startTimeDate == null || startTimeDate === "" || typeof endTimeDate == "undefined" || endTimeDate == null || endTimeDate === "" || typeof restHours == "undefined" || restHours == null || restHours === "" || typeof absenceHours == "undefined" || absenceHours == null || absenceHours === "") {
         return;
       }
 
       let calculateResult = endTimeDate.getTime() - startTimeDate.getTime();
+      if(calculateResult < 0){
+        return;
+      }
       if (isNaN(calculateResult)) {
         console.log("Data error");
       } else {
@@ -263,7 +267,9 @@ export default {
         this.timeCalculation.defferentMinute = parseInt(Math.floor(((Math.floor(calculateResult / (1000 * 60 * 60))) - this.timeCalculation.differentHour) * 60));
         this.timeCalculation.differentTime = parseFloat(this.timeCalculation.differentHour + '.' + this.timeCalculation.defferentMinute).toFixed(1);
       }
-      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - 8)) > 0 ? (this.form.overtime_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - 8)) : (0);
+
+
+      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) > 0 ? (this.form.overtime_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) : (0);
       (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - this.form.overtime_hours)) > 0 ? (this.form.working_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) : (0);
 
     },

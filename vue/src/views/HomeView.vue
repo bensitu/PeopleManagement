@@ -67,26 +67,30 @@
           <div class="block">
             <span class="demonstration"></span>
             <el-date-picker
-                v-model="years"
+                v-model="selectedyear"
                 type="year"
                 :pickerOptions="pickerOptions"
-                placeholder="年選択">
+                placeholder="年選択"
+                format="yyyy"
+                value-format="yyyy">
             </el-date-picker>
+            <el-button class="ml-5" type="primary" icon="el-icon-search" @click="getAttendanceData()">検索</el-button>
           </div>
           <el-table :data="monthData" show-summary stripe border style="width: 100%" class="mt-20">
-            <el-table-column prop="record_id" align="center" label="月"></el-table-column>
-
-            <el-table-column prop="start_time" align="center" label="出勤時間">
+            <el-table-column prop="attendance_ym" align="center" label="月">
+              <template slot-scope="scope">{{scope.row.attendance_ym | converMonth}}</template>
             </el-table-column>
-            <el-table-column prop="end_time" align="center" label="退勤時間">
+            <el-table-column prop="days" align="center" label="営業日数">
             </el-table-column>
-            <el-table-column prop="rest_hours" align="center" label="休憩時間">
+            <el-table-column prop="attendance_days" align="center" label="出勤日数">
             </el-table-column>
-            <el-table-column prop="working_hours" align="center" label="作業時間">
+            <el-table-column prop="absence_days" align="center" label="欠勤日数">
+            </el-table-column>
+            <el-table-column prop="attendance_hours" align="center" label="実働時間">
             </el-table-column>
             <el-table-column prop="overtime_hours" align="center" label="残業時間">
             </el-table-column>
-            <el-table-column prop="absence_hours" align="center" label="欠勤時間">
+            <el-table-column prop="comments" align="center" label="コメンと">
             </el-table-column>
 
           </el-table>
@@ -105,7 +109,13 @@ import AddRecordView from "@/views/AddRecordView";
 
 export default {
   name: 'HomeView',
-
+  filters:{
+    converMonth(value) {
+      if (value != null){
+        return value.substring(4);
+      }
+    }
+  },
   data() {
     return {
       employee_info: {
@@ -114,7 +124,14 @@ export default {
         department_name: '',
       },
       monthData:[],
-      years: '',
+      month:'',
+      days:'',
+      attendance_days:'',
+      absence_days:'',
+      attendance_hours:'',
+      overtime_hours:'',
+      comments:'',
+      selectedyear: '',
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -129,6 +146,7 @@ export default {
       this.employee_info.employee_id = 10001;
     }
     this.getEmployeeInfo(this.employee_info.employee_id);
+    this.getAttendanceData(new Date().getFullYear())
   },
   methods: {
     getEmployeeInfo(employeeID) {
@@ -138,10 +156,19 @@ export default {
         this.employee_info.department_name = res.data.data.dept_name;
       }).catch(err => console.log(err));
     },
-    getAttendanceData(year){
-      this.$axios.get("http://localhost:8090/attendancemonth"+ year).then((res)=>{
-        console.log(res);
+    getAttendanceData(){
+      let year = this.selectedyear;
+      this.$axios.get("http://localhost:8090/lists/"+ year).then((res)=>{
+        this.monthData = res.data.data;
+
+        for (let i = 0; i < this.monthData.length; i++) {
+          this.checkData(i);
+        }
       }).catch(err => console.log(err));
+    },
+    checkData(i){
+
+      this.month = (this.monthData[i].attendance_ym).substring(4);
     },
   }
 }
