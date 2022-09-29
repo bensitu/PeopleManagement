@@ -39,7 +39,7 @@ public class YearMonthController {
 
     @GetMapping("/{year}")
     public DataResult getByYear(@PathVariable String year){
-        System.out.println(year);
+
         return new DataResult(true, yearMonthService.getByYear(year));
     }
 }

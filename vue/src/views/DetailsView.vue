@@ -104,7 +104,7 @@
           <el-table-column prop="working_details" align="center" label="作業内容">
           </el-table-column>
           <el-table-column align="center" label="操作">
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-button
                   size="mini"
                   type="warning"

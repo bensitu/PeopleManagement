@@ -113,12 +113,12 @@
                   </el-form-item>
                   <el-form-item label="労働時間">
                     <el-input type="number" v-model.number="form.working_hours"
-                              :placeholder="this.futureDay?'0':'計算中...'" :disabled="this.futureDay"
+                              :placeholder="checkFutureDate" :disabled="this.futureDay"
                               readonly></el-input>
                   </el-form-item>
                   <el-form-item label="残業時間">
                     <el-input type="number" v-model.number="form.overtime_hours"
-                              :placeholder="this.futureDay?'0':'計算中...'" :disabled="this.futureDay"
+                              :placeholder="checkFutureDate" :disabled="this.futureDay"
                               readonly></el-input>
                   </el-form-item>
                   <el-form-item label="出勤状態">
@@ -273,7 +273,7 @@ export default {
       }
       this.form.working_hours = workingHours;
       (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) > 0 ? (this.form.overtime_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) : (this.form.overtime_hours = 0);
-      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - this.form.overtime_hours)) > 0 ? (this.form.working_hours = (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours))>8?8:Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) : (this.form.working_hours = 0);
+      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - this.form.overtime_hours)) > 0 ? (this.form.working_hours = (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) > 8 ? 8 : Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) : (this.form.working_hours = 0);
 
     },
     resetform() {
@@ -298,6 +298,11 @@ export default {
       } else if (iDate.getTime() - nowDate.getTime() <= 0) {
         this.futureDay = false;
       }
+    },
+  },
+  computed: {
+    checkFutureDate() {
+      return this.futureDay ? '0' : '計算中...';
     },
   }
 }
