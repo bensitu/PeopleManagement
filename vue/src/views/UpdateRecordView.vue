@@ -216,6 +216,7 @@ export default {
                 name: 'Details',
                 params: {
                   employee_id: this.employee_info.employee_id,
+                  attendance_ym: (this.form.attendance_date).replace(/-/g, '').slice(0,6),
                 }
               })
             } else {

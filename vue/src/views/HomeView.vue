@@ -65,22 +65,32 @@
         </div>
 
         <div style="margin-top: 50px">
-          <div class="block">
-            <span class="demonstration"></span>
-            <el-date-picker
-                v-model="selectedYear"
-                type="year"
-                :pickerOptions="pickerOptions"
-                placeholder="年選択"
-                format="yyyy"
-                value-format="yyyy">
-            </el-date-picker>
-            <el-button class="ml-5" type="primary" icon="el-icon-search" @click="getAttendanceData()">検索</el-button>
+          <div class="searchBox floatLeft">
+            <div class="block">
+              <span class="demonstration"></span>
+              <el-date-picker
+                  v-model="selectedYear"
+                  type="year"
+                  :pickerOptions="pickerOptions"
+                  placeholder="年選択"
+                  format="yyyy"
+                  value-format="yyyy">
+              </el-date-picker>
+              <el-button class="ml-5" type="primary" icon="el-icon-search" @click="getAttendanceData()">検索</el-button>
+            </div>
           </div>
+          <div class="goBack floatRight">
+            <el-button class="ml-5" type="info" @click="handleBack()">ログアウト</el-button>
+          </div>
+          <div class="cleanBoth">
+          </div>
+        </div>
           <el-table :data="monthData" show-summary stripe border style="width: 100%" class="mt-20">
             <el-table-column prop="attendance_ym" align="center" label="月">
               <template v-slot="monthsScope">
-                <el-button type="text" size="medium">{{ monthsScope.row.attendance_ym | converMonth }}</el-button>
+                <el-button type="text" size="medium" @click="searchTargetMonthData(monthsScope.row)">
+                  {{ monthsScope.row.attendance_ym | converMonth }}
+                </el-button>
               </template>
             </el-table-column>
             <el-table-column prop="working_days" align="center" label="営業日数">
@@ -98,7 +108,6 @@
             <el-table-column prop="comments" align="center" label="コメント">
             </el-table-column>
           </el-table>
-        </div>
 
       </el-main>
     </el-container>
@@ -146,6 +155,7 @@ export default {
         employee_id: '',
         employee_name: '',
         department_name: '',
+        message: 'ログアウトしました',
       },
       monthData: [],
       working_days: '',
@@ -183,25 +193,40 @@ export default {
       }).catch(err => console.log(err));
     },
     getAttendanceData() {
-      let year = this.selectedYear;
-      this.$axios.get("http://localhost:8090/lists/" + year).then((res) => {
+      this.$axios.get("http://localhost:8090/lists?year=" + this.selectedYear + "&employee_id=" + this.employee_info.employee_id).then((res) => {
         this.monthData = res.data.data;
       }).catch(err => console.log(err));
     },
-
+    searchTargetMonthData(row) {
+      this.$router.push({
+        name: 'Details',
+        params: {
+          attendance_ym: row.attendance_ym,
+          employee_id: this.employee_info.employee_id,
+        }
+      })
+    },
+    handleBack() {
+      this.$router.push({
+        name: 'Login',
+        params: {
+          message: this.employee_info.message,
+        }
+      })
+    },
   },
   computed: {},
 }
 </script>
 
 <style>
-.el-header {
+el-header {
   background-color: #B3C0D1;
   color: #333;
   line-height: 60px;
 }
 
-.el-aside {
+el-aside {
   color: #333;
 }
 
@@ -215,5 +240,9 @@ export default {
 
 .menuItem {
   padding-right: 0 !important;
+}
+
+.searchBox, .goBack {
+  margin: 10px 0;
 }
 </style>
