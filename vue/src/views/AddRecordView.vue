@@ -130,7 +130,7 @@
                   </el-form-item>
                   <el-form-item label="作業内容" prop="working_details"
                                 :rules="[{min: 0, max: 200, type:'string', message: '入力内容は0-200だけです', trigger: 'blur'}]">
-                    <el-input type="textarea" v-model="form.working_details"></el-input>
+                    <el-input type="textarea" v-model.lazy="form.working_details"></el-input>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" @click="onSubmit('form')">登録</el-button>
@@ -207,6 +207,8 @@ export default {
     }
   },
   created() {
+  },
+  mounted() {
     if (this.$route.params.employee_id != null) {
       this.employee_info.employee_id = this.$route.params.employee_id;
     } else {

@@ -120,35 +120,7 @@
 
 export default {
   name: 'HomeView',
-  filters: {
-    converMonth(value) {
-      if (value != null) {
-        return value.substring(4);
-      }
-    },
-    calculateMonthDays(value, that) {
-      if (value != null) {
-        let currentMonth = value.substring(4);
-        while (currentMonth.charAt(0) === '0') {
-          currentMonth = currentMonth.substring(1);
-        }
-        let year = parseInt(that.selectedYear);
-        let month = parseInt(currentMonth);
-        let firstDate = 1;
-        let lastDate = new Date(year, month, 0).getDate();
-        let first = new Date(year, month - 1, firstDate).getTime();
-        let last = new Date(year, month - 1, lastDate).getTime();
-        let count = 0;
-        for (let j = first; j <= last; j += 24 * 3600 * 1000) {
-          let workDay = new Date(j);
-          if (workDay.getDay() >= 1 && workDay.getDay() <= 5) {
-            count++;
-          }
-        }
-        return count;
-      }
-    }
-  },
+
   data() {
     return {
       employee_info: {
@@ -174,6 +146,9 @@ export default {
     }
   },
   created() {
+
+  },
+  mounted() {
     if (this.$route.params.employee_id != null) {
       this.employee_info.employee_id = this.$route.params.employee_id;
     } else {
@@ -182,7 +157,6 @@ export default {
     this.getEmployeeInfo(this.employee_info.employee_id);
     this.selectedYear = (new Date().getFullYear()).toString();
     this.getAttendanceData();
-
   },
   methods: {
     getEmployeeInfo(employeeID) {
@@ -216,6 +190,35 @@ export default {
     },
   },
   computed: {},
+  filters: {
+    converMonth(value) {
+      if (value != null) {
+        return value.substring(4);
+      }
+    },
+    calculateMonthDays(value, that) {
+      if (value != null) {
+        let currentMonth = value.substring(4);
+        while (currentMonth.charAt(0) === '0') {
+          currentMonth = currentMonth.substring(1);
+        }
+        let year = parseInt(that.selectedYear);
+        let month = parseInt(currentMonth);
+        let firstDate = 1;
+        let lastDate = new Date(year, month, 0).getDate();
+        let first = new Date(year, month - 1, firstDate).getTime();
+        let last = new Date(year, month - 1, lastDate).getTime();
+        let count = 0;
+        for (let j = first; j <= last; j += 24 * 3600 * 1000) {
+          let workDay = new Date(j);
+          if (workDay.getDay() >= 1 && workDay.getDay() <= 5) {
+            count++;
+          }
+        }
+        return count;
+      }
+    }
+  },
 }
 </script>
 

@@ -8,7 +8,8 @@ import './assets/global.css';
 import axios from 'axios';
 import 'default-passive-events';
 
-Vue.config.productionTip = false
+//阻止Vue的生产提示
+Vue.config.productionTip = false;
 Vue.use(ElementUI, {locale});
 
 // 全局注册

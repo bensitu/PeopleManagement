@@ -5,7 +5,7 @@
     <el-form-item prop="employeeId">
       <el-input
           type="text"
-          v-model="loginForm.employee_id"
+          v-model.trim="loginForm.employee_id"
           auto-complete="off"
           placeholder="ユーザーID"
       ></el-input>
@@ -44,6 +44,9 @@ export default {
     }
   },
   created() {
+
+  },
+  mounted() {
     this.checkStatus();
   },
   methods: {

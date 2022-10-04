@@ -189,6 +189,9 @@ export default {
     }
   },
   created() {
+
+  },
+  mounted() {
     if (this.$route.params.employee_id != null){
       this.employee_info.employee_id = this.$route.params.employee_id;
     } else {
