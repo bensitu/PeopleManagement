@@ -1,6 +1,7 @@
 <template>
   <el-container style="height: 100vh;">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246); height: 100%">
+      <Navigator></Navigator>
       <el-menu :default-openeds="['1']" :default-active="this.$router.path" style="height: 100%"
                background-color="#545c64" text-color="#fff"
                active-text-color="#ffd04b" router>
@@ -28,6 +29,7 @@
     </el-aside>
 
     <el-container>
+
       <el-header style="font-size: 12px">
         <el-descriptions style="margin-top: 6px" title="" :column="3" border>
           <el-descriptions-item>
@@ -142,9 +144,10 @@
 <script>
 // @ is an alias to /src
 
+import Navigator from "@/views/Navigator";
 export default {
   name: 'DetailsView',
-
+  components: {Navigator},
   data() {
     return {
       employee_info: {
@@ -202,18 +205,28 @@ export default {
         this.getAll();
       }
     },
-    getAll() {
-      this.$axios.get("http://localhost:8090/attendances/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+    async getAll() {
+      // axios({
+      //   method: 'GET',
+      //   url: 'http://localhost:8090/api/attendances',
+      //   params:{
+      //     employee_id: 10001
+      //   },
+      //   data() {
+      //     return undefined;
+      //   }
+      // }).then()
+      await this.$axios.get("http://localhost:8090/attendances/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
         this.pagination.pageSize = res.data.data.size;
         this.pagination.currentPage = res.data.data.current;
         this.pagination.total = res.data.data.total;
         this.dataList = res.data.data.records;
       }).catch(err => console.log(err));
     },
-    getByMonth() {
+     async getByMonth() {
       if (this.$route.params.attendance_ym != null) {
         let month = this.$route.params.attendance_ym;
-        this.$axios.get("http://localhost:8090/attendances/" + month + "/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+        await this.$axios.get("http://localhost:8090/attendances/" + month + "/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
           this.pagination.pageSize = res.data.data.size;
           this.pagination.currentPage = res.data.data.current;
           this.pagination.total = res.data.data.total;

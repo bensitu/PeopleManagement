@@ -233,12 +233,13 @@ export default {
       });
     },
     handleBack() {
-      this.$router.push({
-        name: 'Details',
-        params: {
-          employee_id: this.employee_info.employee_id,
-        }
-      })
+      // this.$router.push({
+      //   name: 'Details',
+      //   params: {
+      //     employee_id: this.employee_info.employee_id,
+      //   }
+      // })
+      this.$router.back();
     },
     resetform() {
       this.form = {}

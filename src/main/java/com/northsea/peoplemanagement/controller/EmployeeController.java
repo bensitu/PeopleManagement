@@ -1,15 +1,10 @@
 package com.northsea.peoplemanagement.controller;
 
-import com.alibaba.druid.util.StringUtils;
 import com.northsea.peoplemanagement.domain.Employee;
 import com.northsea.peoplemanagement.service.EmployeeService;
-import com.northsea.peoplemanagement.util.DataResult;
+import com.northsea.peoplemanagement.vo.util.DataResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author BenSitu

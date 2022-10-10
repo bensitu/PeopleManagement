@@ -73,8 +73,8 @@ export default {
           })
           .catch(err => console.log(err))
     },
-    checkStatus(){
-      if (this.$route.params.message != null){
+    checkStatus() {
+      if (this.$route.params.message != null) {
         this.$message.info(this.$route.params.message);
       }
     },

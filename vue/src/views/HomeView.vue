@@ -15,7 +15,7 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="/details" class="menuItem">
-              <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}"
+              <router-link active-class="" :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}"
                            class="menuLink">詳細
               </router-link>
             </el-menu-item>

@@ -3,7 +3,7 @@ package com.northsea.peoplemanagement.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.northsea.peoplemanagement.domain.YearMonth;
 import com.northsea.peoplemanagement.service.YearMonthService;
-import com.northsea.peoplemanagement.util.DataResult;
+import com.northsea.peoplemanagement.vo.util.DataResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

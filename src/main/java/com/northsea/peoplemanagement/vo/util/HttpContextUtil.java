@@ -1,4 +1,4 @@
-package com.northsea.peoplemanagement.util;
+package com.northsea.peoplemanagement.vo.util;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

@@ -1,4 +1,4 @@
-package com.northsea.peoplemanagement.util;
+package com.northsea.peoplemanagement.vo.util;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.northsea.peoplemanagement.domain.Attendance;
