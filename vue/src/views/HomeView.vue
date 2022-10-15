@@ -160,14 +160,14 @@ export default {
   },
   methods: {
     getEmployeeInfo(employeeID) {
-      this.$axios.get("http://localhost:8090/employees/" + employeeID).then((res) => {
+      this.$axios.get("/api/employees/" + employeeID).then((res) => {
         this.employee_info.employee_id = res.data.data.employee_id;
         this.employee_info.employee_name = res.data.data.employee_name;
         this.employee_info.department_name = res.data.data.dept_name;
       }).catch(err => console.log(err));
     },
     getAttendanceData() {
-      this.$axios.get("http://localhost:8090/lists?year=" + this.selectedYear + "&employee_id=" + this.employee_info.employee_id).then((res) => {
+      this.$axios.get("/api/lists?year=" + this.selectedYear + "&employee_id=" + this.employee_info.employee_id).then((res) => {
         this.monthData = res.data.data;
       }).catch(err => console.log(err));
     },

@@ -52,7 +52,7 @@ export default {
   methods: {
     login() {
       this.$axios
-          .post('http://localhost:8090/api/login', {
+          .post('/api/login', {
             employee_id: this.loginForm.employee_id,
             password: this.loginForm.password
           })

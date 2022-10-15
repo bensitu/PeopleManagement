@@ -57,7 +57,7 @@ public class AttendanceServiceTest {
 
     @Test
     void getByDateTest(){
-        LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<Attendance>();
         lambdaQueryWrapper.eq(Attendance::getAttendance_date, "2022-09-14");
         List<Attendance> attendances = attendanceService.list();
     }

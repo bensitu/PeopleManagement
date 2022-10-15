@@ -63,7 +63,7 @@ public class EmployeeMapperTest {
 
     //分页
     @Test
-    void GetPageTest() {
+    void getPageTest() {
         IPage<Employee> page = new Page<Employee>(1, 10);
         employeeMapper.selectPage(page, null);
         System.out.println(page.getCurrent());

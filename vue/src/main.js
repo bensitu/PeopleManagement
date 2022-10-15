@@ -17,9 +17,10 @@ Vue.use(ElementUI, {locale});
 //var axios = require('axios')
 Vue.prototype.$axios = axios
 
+
 // 设置反向代理，前端请求默认发送到 http://localhost:8888/api
 // リバース プロキシを設定します。フロントエンド リクエストはデフォルトで http://localhost:8888/api に送信されます
-axios.defaults.baseURL = 'http://localhost:8090/'
+// axios.defaults.baseURL = '/api'
 
 new Vue({
   router,

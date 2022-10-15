@@ -229,7 +229,7 @@ export default {
         this.form.flow_status_id = 0;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$axios.post("http://localhost:8090/attendances", this.form).then((res) => {
+            this.$axios.post("/api/attendances", this.form).then((res) => {
               if (res.data.flag) {
                 this.$message.success("登録完了しました");
                 this.$router.push({
@@ -289,7 +289,7 @@ export default {
       this.form = {}
     },
     getEmployeeInfo(employeeID) {
-      this.$axios.get("http://localhost:8090/employees/" + employeeID).then((res) => {
+      this.$axios.get("/api/employees/" + employeeID).then((res) => {
         this.employee_info.employee_id = res.data.data.employee_id;
         this.employee_info.employee_name = res.data.data.employee_name;
         this.employee_info.department_name = res.data.data.dept_name;

@@ -203,14 +203,14 @@ export default {
   methods: {
     getInfo() {
       const recordId = this.$route.params.record_id;
-      this.$axios.get("http://localhost:8090/attendances/details/" + recordId).then((res) => {
+      this.$axios.get("/api/attendances/details/" + recordId).then((res) => {
         this.form = res.data.data;
       })
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.put("http://localhost:8090/attendances", this.form).then((res) => {
+          this.$axios.put("/api/attendances", this.form).then((res) => {
             this.form.update_user_id = this.employee_info.employee_id;
             this.form.update_date = new Date();
             if (res.data.flag) {
@@ -245,7 +245,7 @@ export default {
       this.form = {}
     },
     getEmployeeInfo(employeeID) {
-      this.$axios.get("http://localhost:8090/employees/" + employeeID).then((res) => {
+      this.$axios.get("/api/employees/" + employeeID).then((res) => {
         this.employee_info.employee_id = res.data.data.employee_id;
         this.employee_info.employee_name = res.data.data.employee_name;
         this.employee_info.department_name = res.data.data.dept_name;

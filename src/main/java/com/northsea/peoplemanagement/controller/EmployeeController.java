@@ -3,6 +3,7 @@ package com.northsea.peoplemanagement.controller;
 import com.northsea.peoplemanagement.domain.Employee;
 import com.northsea.peoplemanagement.service.EmployeeService;
 import com.northsea.peoplemanagement.vo.util.DataResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * @CreateDate 2022/9/8
  * @Description
  */
+@Slf4j
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {

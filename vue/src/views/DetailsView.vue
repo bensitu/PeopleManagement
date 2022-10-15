@@ -3,8 +3,7 @@
     <el-aside width="200px" style="background-color: rgb(238, 241, 246); height: 100%">
       <Navigator></Navigator>
       <el-menu :default-openeds="['1']" :default-active="this.$router.path" style="height: 100%"
-               background-color="#545c64" text-color="#fff"
-               active-text-color="#ffd04b" router>
+        background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" router>
         <el-submenu index="1">
           <template slot="title"><i class="el-icon-menu"></i>勤怠管理</template>
           <el-menu-item-group>
@@ -15,12 +14,12 @@
             </el-menu-item>
             <el-menu-item index="/details" class="menuItem">
               <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}"
-                           class="menuLink">詳細
+                class="menuLink">詳細
               </router-link>
             </el-menu-item>
             <el-menu-item index="/addrecord" class="menuItem">
               <router-link :to="{name: 'Addrecord', params: {employee_id:this.employee_info.employee_id}}"
-                           class="menuLink">登録
+                class="menuLink">登録
               </router-link>
             </el-menu-item>
           </el-menu-item-group>
@@ -69,12 +68,8 @@
         <div class="functionNav mt-20">
           <div class="searchBox floatLeft">
             <div class="block">
-              <el-date-picker
-                  v-model="pagination.search_date"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  @change=""
-                  placeholder="日付選択">
+              <el-date-picker v-model="pagination.search_date" type="date" value-format="yyyy-MM-dd" @change=""
+                placeholder="日付選択">
               </el-date-picker>
               <el-button class="ml-5" type="primary" icon="el-icon-search" @click="searchInfo()">検索</el-button>
             </div>
@@ -110,29 +105,20 @@
           </el-table-column>
           <el-table-column align="center" label="操作">
             <template v-slot="scope">
-              <el-button
-                  size="mini"
-                  type="warning"
-                  @click="handleEdit(scope.$index, scope.row)">更新<i class="el-icon-edit ml-5"></i></el-button>
+              <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">更新<i
+                  class="el-icon-edit ml-5"></i></el-button>
               <br>
-              <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)" class="mt-5">削除<i class="el-icon-delete ml-5"></i>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" class="mt-5">削除<i
+                  class="el-icon-delete ml-5"></i>
               </el-button>
             </template>
           </el-table-column>
         </el-table>
         <div class="pagination-container">
           <div class="block mt-5">
-            <el-pagination
-                class="pagination"
-                @current-change="handleCurrentChange"
-                :current-page="pagination.currentPage"
-                :page-size="pagination.pageSize"
-                small
-                layout="total, prev, pager, next"
-                :total="pagination.total">
+            <el-pagination class="pagination" @current-change="handleCurrentChange"
+              :current-page="pagination.currentPage" :page-size="pagination.pageSize" small
+              layout="total, prev, pager, next" :total="pagination.total">
             </el-pagination>
           </div>
         </div>
@@ -145,9 +131,10 @@
 // @ is an alias to /src
 
 import Navigator from "@/views/Navigator";
+
 export default {
   name: 'DetailsView',
-  components: {Navigator},
+  components: { Navigator },
   data() {
     return {
       employee_info: {
@@ -195,7 +182,7 @@ export default {
     searchInfo() {
       let param = "?attendance_date=" + this.pagination.search_date;
       if (this.pagination.search_date !== null) {
-        this.$axios.get("http://localhost:8090/attendances/search/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
+        this.$axios.get("/api1/attendances/search/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
           this.pagination.pageSize = res.data.data.size;
           this.pagination.currentPage = res.data.data.current;
           this.pagination.total = res.data.data.total;
@@ -206,27 +193,32 @@ export default {
       }
     },
     async getAll() {
-      // axios({
+      // let params = {
+      //   currentPage: this.pagination.currentPage,
+      //   pageSize: this.pagination.pageSize,
+      // }
+      // await this.$axios({
       //   method: 'GET',
       //   url: 'http://localhost:8090/api/attendances',
-      //   params:{
-      //     employee_id: 10001
-      //   },
-      //   data() {
-      //     return undefined;
-      //   }
-      // }).then()
-      await this.$axios.get("http://localhost:8090/attendances/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+      //   params: params,
+      // }).then((res) => {
+      //   this.pagination.pageSize = res.data.data.size;
+      //   this.pagination.currentPage = res.data.data.current;
+      //   this.pagination.total = res.data.data.total;
+      //   this.dataList = res.data.data.records;
+      // }).catch(err => console.log(err));
+
+      await this.$axios.get("/api1/attendances/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
         this.pagination.pageSize = res.data.data.size;
         this.pagination.currentPage = res.data.data.current;
         this.pagination.total = res.data.data.total;
         this.dataList = res.data.data.records;
       }).catch(err => console.log(err));
     },
-     async getByMonth() {
+    async getByMonth() {
       if (this.$route.params.attendance_ym != null) {
         let month = this.$route.params.attendance_ym;
-        await this.$axios.get("http://localhost:8090/attendances/" + month + "/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+        await this.$axios.get("/api1/attendances/" + month + "/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
           this.pagination.pageSize = res.data.data.size;
           this.pagination.currentPage = res.data.data.current;
           this.pagination.total = res.data.data.total;
@@ -255,8 +247,8 @@ export default {
       })
     },
     handleDelete(index, row) {
-      this.$confirm("削除は確認しましたか", "メッセージ", {type: "info"}).then(() => {
-        this.$axios.delete("http://localhost:8090/attendances/delete/" + row.record_id).then((res) => {
+      this.$confirm("削除は確認しましたか", "メッセージ", { type: "info" }).then(() => {
+        this.$axios.delete("/api/attendances/delete/" + row.record_id).then((res) => {
           if (res.data.flag) {
             this.$message.success("削除しました");
           } else {
@@ -287,7 +279,7 @@ export default {
       })
     },
     getEmployeeInfo(employeeID) {
-      this.$axios.get("http://localhost:8090/employees/" + employeeID).then((res) => {
+      this.$axios.get("/api1/employees/" + employeeID).then((res) => {
         this.employee_info.employee_id = res.data.data.employee_id;
         this.employee_info.employee_name = res.data.data.employee_name;
         this.employee_info.department_name = res.data.data.dept_name;
@@ -308,7 +300,9 @@ export default {
   color: #333;
 }
 
-.searchBox, .goBack, .newRecord {
+.searchBox,
+.goBack,
+.newRecord {
   margin: 10px 0;
 }
 
