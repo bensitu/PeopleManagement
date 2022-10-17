@@ -28,7 +28,6 @@
     </el-aside>
 
     <el-container>
-
       <el-header style="font-size: 12px">
         <el-descriptions style="margin-top: 6px" title="" :column="3" border>
           <el-descriptions-item>
