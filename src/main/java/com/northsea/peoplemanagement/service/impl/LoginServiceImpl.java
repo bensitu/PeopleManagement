@@ -1,5 +1,6 @@
 package com.northsea.peoplemanagement.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.northsea.peoplemanagement.vo.LoginVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.northsea.peoplemanagement.domain.Employee;
@@ -9,6 +10,7 @@ import com.northsea.peoplemanagement.result.Result;
 import com.northsea.peoplemanagement.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
@@ -25,12 +27,16 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Result login(LoginDTO loginDTO) {
-        if (StringUtils.isEmpty(loginDTO.getEmployee_id())){
+        if (ObjectUtils.isEmpty(loginDTO.getEmployee_id())){
             return new Result(400, "ユーザーIDを入力してください","");
         }
-        if (StringUtils.isEmpty(loginDTO.getPassword())){
+        if (ObjectUtils.isEmpty(loginDTO.getPassword())){
             return new Result(400, "パスワードを入力してください","");
         }
+
+//        LambdaQueryWrapper<Employee> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+//        lambdaQueryWrapper.eq(ObjectUtils.isEmpty(loginDTO.getEmployee_id()), loginDTO::getEmployee_id, loginDTO.getEmployee_id());
+
         QueryWrapper<Employee> wrapper = new QueryWrapper<>();
         wrapper.eq("employee_id", loginDTO.getEmployee_id());
         Employee employee = employeeMapper.selectOne(wrapper);

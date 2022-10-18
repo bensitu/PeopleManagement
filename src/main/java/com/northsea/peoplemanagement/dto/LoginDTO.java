@@ -1,5 +1,6 @@
 package com.northsea.peoplemanagement.dto;
 
+import com.northsea.peoplemanagement.domain.Employee;
 import lombok.Data;
 
 /**
@@ -11,4 +12,5 @@ import lombok.Data;
 public class LoginDTO {
     private Integer employee_id;
     private String password;
+
 }
