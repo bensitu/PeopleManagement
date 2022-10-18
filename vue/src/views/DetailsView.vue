@@ -181,7 +181,7 @@ export default {
     searchInfo() {
       let param = "?attendance_date=" + this.pagination.search_date;
       if (this.pagination.search_date !== null) {
-        this.$axios.get("/api1/attendances/search/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
+        this.$axios.get("/api/attendances/search/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
           this.pagination.pageSize = res.data.data.size;
           this.pagination.currentPage = res.data.data.current;
           this.pagination.total = res.data.data.total;
